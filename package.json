@@ -1,6 +1,6 @@
 {
   "name": "professor-ai",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Professor AI - an AI-powered coding learning platform",
   "private": true,
   "type": "module",
