@@ -1,0 +1,87 @@
+/**
+ * Firestore Security Rules for Professor AI (Spark plan).
+ *
+ * Save these to the Firebase Console → Firestore Database → Rules tab.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Users ───────────────────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow write: if isAuthenticated()
+                    && request.auth.uid == userId
+                    && request.resource.data.size() < 2000;
+    }
+
+    // ─── Usage records (quota counters) ──────────────────────────────────────
+    match /users/{userId}/usage/{date} {
+      allow read, write: if isAuthenticated()
+                          && request.auth.uid == userId
+                          && date matches r'^\d{4}-\d{2}-\d{2}$';
+    }
+
+    // ─── Private user lessons ────────────────────────────────────────────────
+    match /users/{userId}/lessons/{lessonId} {
+      allow read:  if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+      allow create: if isAuthenticated()
+                     && request.auth.uid == userId
+                     && !isCooldown(userId);
+      allow update, delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ─── Public lessons ──────────────────────────────────────────────────────
+    match /publicLessons/{lessonId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated()
+                      && resource.data.ownerId == request.auth.uid
+                      && !isCooldown(resource.data.ownerId)
+                      && getResourcePermission(resource.data.visibility) == 'public';
+      allow update: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ─── User categories ─────────────────────────────────────────────────────
+    match /users/{userId}/categories/{catId} {
+      allow read, write: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ─── Progress ────────────────────────────────────────────────────────────
+    match /users/{userId}/progress/{progressId} {
+      allow read, write: if isAuthenticated()
+                          && resource.data.userId == request.auth.uid
+                          && progressId == lessonId;
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    /** Quota: max generations per day based on cooldown status. */
+    function getMaxGenerationsPerDay(uid) {
+      let cdUntil = get(/databases/$(database)/documents/users/$(uid)).data.cooldownUntil;
+      return (cdUntil > request.time.millis / 1000) ? 2 : 5;
+    }
+
+    function isCooldown(uid) {
+      let cdUntil = get(/databases/$(database)/documents/users/$(uid)).data.cooldownUntil;
+      return cdUntil > request.time.millis / 1000;
+    }
+
+    /** Daily generation count must not exceed limit. Checked via subcollection docs. */
+    function exceedsDailyGenerationLimit(uid, date) {
+      let usageDoc = get(/databases/$(database)/documents/users/$(uid)/usage/$(date));
+      if (usageDoc.exists) {
+        return usageDoc.data.generations >= getMaxGenerationsPerDay(uid);
+      }
+      return false;
+    }
+
+    function getResourcePermission(resourceData) {
+      return resourceData.visibility;
+    }
+  }
+}

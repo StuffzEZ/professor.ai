@@ -1,0 +1,17 @@
+{
+  "name": "Professor AI",
+  "short_name": "Professor AI",
+  "description": "AI-powered coding learning platform grounded in real documentation.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#080919",
+  "theme_color": "#080919",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
