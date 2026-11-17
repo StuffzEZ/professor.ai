@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2025-01-15
+> Last updated: 2025-01-15 (v1.2.2)
 
 ## ✅ Done
 
@@ -27,6 +27,9 @@
 - Public assets: `favicon.svg`, `robots.txt`, `manifest.json`
 - GitHub Actions: `.github/workflows/deploy.yml` — builds and deploys to GitHub Pages
 - Firestore rules: `firestore/firestore.rules` — full security rules with quota enforcement
+  - v1.2.2 fix: replaced invalid `r'^...$'` raw-string regex with a plain quoted regex
+    (`date matches '[0-9]{4}-[0-9]{2}-[0-9]{2}'`); replaced `let` with `var`
+    (rules language only supports `var`). Both were breaking the rules parser.
 - Private setup: `private-setup/README.md` — step-by-step Firebase instructions
 - Example setup: `private-setup.example/README.md` — committed template (no secrets)
 - `.env.example` — placeholder config values
@@ -58,5 +61,5 @@ All core implementation is complete. Remaining optional improvements:
 
 | Item | Source Wording | Status |
 |------|----------------|--------|
-| *(None yet)* | — | — |
+| Fix Firestore rules parser errors | "warning: Error saving rules - Line 22: Unexpected 'matches'.; Line 22: token recognition error at: '\'; Line 22: Unexpected '-'.; Line 22: token recognition error at: '\'; Line 22: Unexpected '-'.; Line 22: token recognition error at: '\'; Line 22: Unexpected '$'.; Line 65: Unexpected 'if'.; Line 66: mismatched input 'let' expecting '}' firestore rules" | ✅ Done (v1.2.2) |
 

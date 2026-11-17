@@ -5,6 +5,7 @@ Generates interactive lessons that build toward a learner's stated end goal — 
 end of a course, you have actually built what you asked for.
 
 ![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)
+![Version](https://img.shields.io/badge/version-1.2.2-blue)
 ![Vite](https://img.shields.io/badge/Vite-5.4-blue)
 ![React](https://img.shields.io/badge/React-18-purple)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
