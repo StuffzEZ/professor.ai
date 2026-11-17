@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2025-01-15 (v1.2.4 — reCAPTCHA Enterprise)
+> Last updated: 2025-01-15 (v1.2.4 — reCAPTCHA Enterprise, Dependabot added)
 
 ## ✅ Done
 
