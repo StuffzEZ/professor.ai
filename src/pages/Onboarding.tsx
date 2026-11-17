@@ -38,7 +38,7 @@ export default function Onboarding() {
         defaultDifficulty: difficulty,
         onboardingComplete: true,
         createdAt: new Date().toISOString(),
-        cooldownUntil: 0,
+        cooldownUntil: Date.now() + 7 * 24 * 60 * 60 * 1000,
       });
       localStorage.setItem('professor.onboarding', '1');
       navigate('/');

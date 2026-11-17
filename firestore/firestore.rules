@@ -36,8 +36,7 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated()
                       && resource.data.ownerId == request.auth.uid
-                      && !isCooldown(resource.data.ownerId)
-                      && getResourcePermission(resource.data.visibility) == 'public';
+                      && !isCooldown(resource.data.ownerId);
       allow update: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
       allow delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
     }
@@ -50,8 +49,8 @@ service cloud.firestore {
     // ─── Progress ────────────────────────────────────────────────────────────
     match /users/{userId}/progress/{progressId} {
       allow read, write: if isAuthenticated()
-                          && resource.data.userId == request.auth.uid
-                          && progressId == lessonId;
+                          && request.auth.uid == userId
+                          && resource.data.userId == request.auth.uid;
     }
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -60,28 +59,12 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    /** Quota: max generations per day based on cooldown status. */
-    function getMaxGenerationsPerDay(uid) {
-      let cdUntil = get(/databases/$(database)/documents/users/$(uid)).data.cooldownUntil;
-      return (cdUntil > request.time.millis / 1000) ? 2 : 5;
-    }
-
+    /** True while the account is in its first 7 days (cool-down period). */
     function isCooldown(uid) {
-      let cdUntil = get(/databases/$(database)/documents/users/$(uid)).data.cooldownUntil;
-      return cdUntil > request.time.millis / 1000;
-    }
-
-    /** Daily generation count must not exceed limit. Checked via subcollection docs. */
-    function exceedsDailyGenerationLimit(uid, date) {
-      let usageDoc = get(/databases/$(database)/documents/users/$(uid)/usage/$(date));
-      if (usageDoc.exists) {
-        return usageDoc.data.generations >= getMaxGenerationsPerDay(uid);
-      }
-      return false;
-    }
-
-    function getResourcePermission(resourceData) {
-      return resourceData.visibility;
+      let ref = /databases/$(database)/documents/users/$(uid);
+      if (!exists(ref)) return true;
+      let cdUntil = get(ref).data.cooldownUntil;
+      return cdUntil > request.time.millis;
     }
   }
 }
