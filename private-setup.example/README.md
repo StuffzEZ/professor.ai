@@ -29,6 +29,7 @@ VITE_FIREBASE_PROJECT_ID=your-project-id
 VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
 VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
+VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
 ## Step 4: Enable Authentication Providers
@@ -91,6 +92,7 @@ npm run dev
 | `VITE_FIREBASE_STORAGE_BUCKET` | `.env.local` |
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | `.env.local` |
 | `VITE_FIREBASE_APP_ID` | `.env.local` |
+| `VITE_FIREBASE_MEASUREMENT_ID` | `.env.local` (optional — Google Analytics) |
 | `VITE_APPCHECK_KEY` | `.env.local` (optional but recommended) |
 | `VITE_PROFESSOR_API_URL` | `.env.local` (optional) |
 | `VITE_PROFESSOR_API_KEY` | `.env.local` (optional) |
