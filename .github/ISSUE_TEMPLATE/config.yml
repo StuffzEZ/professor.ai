@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/stufy/professor.ai#readme
+    about: Setup guides, architecture, and quotas
+  - name: Private setup
+    url: https://github.com/stufy/professor.ai/tree/main/private-setup.example
+    about: Firebase configuration steps (no secrets committed)

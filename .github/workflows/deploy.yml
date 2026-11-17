@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# PRs are checked by the CI workflow (.github/workflows/ci.yml).
+# This workflow only runs on main pushes and manual dispatches.
+
 permissions:
   contents: read
   pages: write

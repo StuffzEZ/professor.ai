@@ -1,0 +1,35 @@
+title: Feature request
+labels: enhancement
+assignees: ''
+description: Suggest an improvement or new feature for Professor AI.
+body:
+  - type: textarea
+    attributes:
+      label: Problem / motivation
+      description: What problem does this feature solve? Why is it needed?
+      placeholder: I would be able to ... if ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed solution
+      description: Describe the feature in detail. Include any relevant screenshots or mockups.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you consider and why did you reject them?
+    validations:
+      required: false
+  - type: checkboxes
+    attributes:
+      label: Constraints
+      description: Does this feature respect the project's constraints?
+      options:
+        - label: Uses only Firebase Spark (free plan) — no Cloud Functions, no Blaze
+          required: true
+        - label: Accessible (WCAG 2.2 AA)
+          required: true
+        - label: Lightweight (no heavy dependencies, lazy-loaded)
+          required: true

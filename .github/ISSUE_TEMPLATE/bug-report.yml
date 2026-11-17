@@ -1,0 +1,35 @@
+title: Bug report
+labels: bug
+assignees: ''
+description: Report a defect or unexpected behavior in Professor AI.
+body:
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: Describe the bug in as much detail as you can.
+      placeholder: What did you expect to happen? What actually happened?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: A numbered list of steps that reliably trigger the bug.
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+        3. See error
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Environment
+      description: Browser, OS, app version, and whether you are on localhost or GitHub Pages.
+      placeholder: e.g. Chrome 120 on Windows, v1.2.4, GitHub Pages
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Screenshots / console output
+      description: Paste screenshots or browser console errors if relevant.
+    validations:
+      required: false

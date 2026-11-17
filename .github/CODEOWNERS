@@ -1,0 +1,9 @@
+* @stufy
+
+.github/ @stufy
+firestore/ @stufy
+src/ @stufy
+package.json @stufy
+vite.config.ts @stufy
+tsconfig.json @stufy
+tailwind.config.js @stufy
