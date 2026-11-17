@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2025-01-15 (v1.2.4 — reCAPTCHA Enterprise, Dependabot added)
+> Last updated: 2025-01-15 (v1.2.4 — reCAPTCHA Enterprise, Dependabot, CI + PR templates)
 
 ## ✅ Done
 
@@ -26,6 +26,11 @@
 - Chat bar: `src/components/chat/AdaptiveChatBar.tsx` — rainbow-gradient border, hover-retract, hint button, keyboard support
 - Public assets: `favicon.svg`, `robots.txt`, `manifest.json`
 - GitHub Actions: `.github/workflows/deploy.yml` — builds and deploys to GitHub Pages
+- CI: `.github/workflows/ci.yml` — lint + typecheck + build on every push and PR
+- Issue templates: `.github/ISSUE_TEMPLATE/bug-report.yml`, `feature-request.yml`, `config.yml`
+- PR template: `.github/pull_request_template.md`
+- CODEOWNERS: `.github/CODEOWNERS` — @stufy reviews all PRs
+- Dependabot: `.github/dependabot.yml` — weekly npm updates, grouped into single PRs
 - Firestore rules: `firestore/firestore.rules` — full security rules with quota enforcement
   - v1.2.3: removed the `date matches '...'` check from the usage path match (the `matches`
     keyword is not valid inside a `match` path pattern — it caused "Unexpected 'matches'"
