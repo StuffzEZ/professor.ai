@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
@@ -10,7 +10,7 @@ updates:
     allow:
       - dependency-type: "all"
     groups:
-      - name: "all-dependencies"
+      all-dependencies:
         patterns:
           - "*"
     commit-message:
