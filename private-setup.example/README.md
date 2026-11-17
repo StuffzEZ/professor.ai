@@ -59,14 +59,17 @@ VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
    - Your GitHub Pages URL: `professor-ai.github.io` (or `matth.github.io` depending on your username)
    - `*.firebaseapp.com` (for preview deployments)
 
-## Step 7: Set Up App Check (reCAPTCHA)
+## Step 7: Set Up App Check (reCAPTCHA Enterprise)
 
 1. In Firebase Console, go to **App Check**.
-2. Under **reCAPTCHA**, click **Register app**.
-3. Choose **Web**.
-4. Copy the **Site key**.
-5. Paste it into `.env.local` as `VITE_APPCHECK_KEY`.
-6. Enable **Debug mode** for localhost (optional, useful during development).
+2. Click **Register app**.
+3. Choose **Web** as the platform.
+4. Under **reCAPTCHA**, select **reCAPTCHA Enterprise** (not reCAPTCHA v3).
+5. Register a reCAPTCHA Enterprise site key in the Google Cloud Console (reCAPTCHA → reCAPTCHA Enterprise → Add → select "Enterprise" mode, add your domain).
+6. Copy the **Site key** from the reCAPTCHA Enterprise registration.
+7. Paste it into `.env.local` as `VITE_APPCHECK_KEY`.
+8. Enable **Debug mode** for localhost (optional, useful during development).
+   - In App Check → reCAPTCHA Enterprise → Debug tokens, add your local debug token.
 
 ## Step 8: Run Locally
 
@@ -93,7 +96,7 @@ npm run dev
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | `.env.local` |
 | `VITE_FIREBASE_APP_ID` | `.env.local` |
 | `VITE_FIREBASE_MEASUREMENT_ID` | `.env.local` (optional — Google Analytics) |
-| `VITE_APPCHECK_KEY` | `.env.local` (optional but recommended) |
+| `VITE_APPCHECK_KEY` | `.env.local` (reCAPTCHA Enterprise site key, recommended) |
 | `VITE_PROFESSOR_API_URL` | `.env.local` (optional) |
 | `VITE_PROFESSOR_API_KEY` | `.env.local` (optional) |
 | `VITE_PROFESSOR_MODEL` | `.env.local` (optional) |
@@ -103,7 +106,7 @@ npm run dev
 ## Security Notes
 
 - Never commit `.env.local` or any file containing secrets.
-- App Check (reCAPTCHA v3) is best-effort deterrence — it reduces bots but does not guarantee security.
+- App Check (reCAPTCHA Enterprise) is best-effort deterrence — it reduces bots but does not guarantee security.
 - Per-account quotas are enforced in Firestore rules, not client-side code.
 - Disposable email domains are blocked at sign-up via a client-side check.
 - Email verification is required before generating lessons or publishing publicly.

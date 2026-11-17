@@ -10,17 +10,17 @@
 - All logic runs client-side (React/Vite)
 - Firestore security rules enforce quotas and access control
 - No server-side code to maintain or scale
-- App Check (reCAPTCHA v3) is the only bot-deterrence available
+- App Check (reCAPTCHA Enterprise) is the only bot-deterrence available
 
 **Trade-off:** Client-side code is visible to users, so quotas must be enforced in Firestore rules (not just client-side). We do this.
 
-## 2. App Check (reCAPTCHA v3) for Bot Deterrence
+## 2. App Check (reCAPTCHA Enterprise) for Bot Deterrence
 
-**Decision:** Integrate Firebase App Check with reCAPTCHA v3 at app init.
+**Decision:** Integrate Firebase App Check with reCAPTCHA Enterprise at app init.
 
 **Why:** On the free tier, there's no server to run server-side rate limiting. App Check is the best available bot-deterrence. It's best-effort — we document this honestly.
 
-**Trade-off:** reCAPTCHA v3 is not a guarantee. Bots can still bypass it. We mitigate with per-account quotas in Firestore rules and disposable email domain blocking.
+**Trade-off:** reCAPTCHA Enterprise is not a guarantee. Bots can still bypass it. We mitigate with per-account quotas in Firestore rules and disposable email domain blocking.
 
 ## 3. Pollinations AI as Default Fallback
 

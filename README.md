@@ -41,7 +41,7 @@ src/
   lib/
     ai/              Provider factories, lesson generator, chat logic, doc grounding
     store.ts         Firestore data layer (queries, batch writes, quota helpers)
-    firebase.ts      One-time Firebase init + App Check reCAPTCHA v3
+    firebase.ts      One-time Firebase init + App Check reCAPTCHA Enterprise
     auth.ts          Email dedupe + disposable domain blocklist
     config.ts        Centralized env vars
     types.ts         Shared TypeScript interfaces
@@ -84,7 +84,7 @@ At minimum you need to:
 2. Enable **Email/Password**, **Google**, and **GitHub** sign-in providers.
 3. Create a Firestore database (start in test mode — rules will lock it down).
 4. Copy the web app config values.
-5. (Optional but recommended) Register an App Check reCAPTCHA v3 token.
+5. (Optional but recommended) Register an App Check reCAPTCHA Enterprise site key.
 6. Add your domain(s) to the authorised domains list.
 
 ### Step 2 — Configure Environment Variables
@@ -103,7 +103,7 @@ VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
 VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
 VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
-VITE_APPCHECK_KEY=your_recaptcha_site_key   # optional but recommended
+VITE_APPCHECK_KEY=recaptcha_enterprise_site_key  # optional but recommended (reCAPTCHA Enterprise)
 ```
 
 These keys are **client-side only** and are not secret — they are embedded in the

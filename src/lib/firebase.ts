@@ -1,7 +1,7 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { getAuth, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { isFirebaseConfigured, appCheckKey } from './config';
 
 let app: FirebaseApp | null = null;
@@ -9,9 +9,9 @@ let auth: Auth | null = null;
 let db: Firestore | null = null;
 
 /**
- * Initialise Firebase exactly once. App Check (reCAPTCHA v3) is attached when
- * a site key is configured — it is the main bot-deterrence layer on the free
- * tier and is required before any Firestore read/write.
+ * Initialise Firebase exactly once. App Check (reCAPTCHA Enterprise) is attached
+ * when a site key is configured — it is the main bot-deterrence layer on the
+ * free tier and is required before any Firestore read/write.
  */
 export function initFirebase(): { app: FirebaseApp; auth: Auth; db: Firestore } {
   if (app) {
@@ -36,7 +36,7 @@ export function initFirebase(): { app: FirebaseApp; auth: Auth; db: Firestore } 
 
   if (appCheckKey) {
     try {
-        initializeAppCheck(app, { provider: new ReCaptchaV3Provider(appCheckKey) });
+        initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(appCheckKey) });
     } catch (err) {
       // App Check is best-effort at init; failures surface on first request.
       console.warn('App Check initialisation failed:', err);

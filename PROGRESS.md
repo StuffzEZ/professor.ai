@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2025-01-15 (v1.2.3 — rules fixed)
+> Last updated: 2025-01-15 (v1.2.4 — reCAPTCHA Enterprise)
 
 ## ✅ Done
 
@@ -9,7 +9,7 @@
 - Accessibility: focus-visible outlines, `prefers-reduced-motion` support, skip-link, ARIA landmarks
 - Type system: `src/lib/types.ts` — `LessonPlan`, `Category`, `UserProfile`, `UsageRecord`, `ChatMessage`, `QUOTA`, `DIFFICULTIES`, `CATEGORY_ICONS`
 - Config: `src/lib/config.ts` — centralized Vite env vars (Firebase, App Check, Professor endpoint, Pollinations fallback)
-- Firebase init: `src/lib/firebase.ts` — one-time init with App Check reCAPTCHA v3
+- Firebase init: `src/lib/firebase.ts` — one-time init with App Check reCAPTCHA Enterprise
 - Firestore data layer: `src/lib/store.ts` — pagination, batch writes, quota counters, doc grounding metadata
 - Auth helpers: `src/lib/auth.ts` — email dedupe, disposable-domain blocklist
 - Utility: `src/lib/utils.ts` — `cn()` via clsx + tailwind-merge
