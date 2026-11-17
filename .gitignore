@@ -36,4 +36,5 @@ coverage/
 # Private setup instructions (no secrets committed)
 private-setup/.!
 private-setup/*
+private-setup.exampe.gitignore/*
 !private-setup.example/README.md
