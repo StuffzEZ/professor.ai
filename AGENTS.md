@@ -68,7 +68,7 @@ src/
 
 - Commit messages: conventional commits (`feat:`, `fix:`, `docs:`, `chore:`)
 - Version bump per commit (semantic versioning)
-- Include `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>` trailer
+- Include `Co-authored-by: stufyaibot <stufyaibot@users.noreply.github.com>` trailer on every commit
 
 ## Forbidden Actions
 
