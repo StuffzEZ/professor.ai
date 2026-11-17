@@ -1,13 +1,8 @@
-/**
- * Firestore Security Rules for Professor AI (Spark plan).
- *
- * Save these to the Firebase Console → Firestore Database → Rules tab.
- */
-rules_version = '2';
+﻿rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ─── Users ───────────────────────────────────────────────────────────────
+    // ─── Users ───────────────────────────────────────────────────────────
     match /users/{userId} {
       allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
       allow write: if isAuthenticated()
@@ -15,14 +10,13 @@ service cloud.firestore {
                     && request.resource.data.size() < 2000;
     }
 
-    // ─── Usage records (quota counters) ──────────────────────────────────────
+    // ─── Usage records (quota counters) ──────────────────────────────────
     match /users/{userId}/usage/{date} {
       allow read, write: if isAuthenticated()
-                          && request.auth.uid == userId
-                          && date matches '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+                          && request.auth.uid == userId;
     }
 
-    // ─── Private user lessons ────────────────────────────────────────────────
+    // ─── Private user lessons ────────────────────────────────────────────
     match /users/{userId}/lessons/{lessonId} {
       allow read:  if isAuthenticated() && resource.data.ownerId == request.auth.uid;
       allow create: if isAuthenticated()
@@ -31,7 +25,7 @@ service cloud.firestore {
       allow update, delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
     }
 
-    // ─── Public lessons ──────────────────────────────────────────────────────
+    // ─── Public lessons ──────────────────────────────────────────────────
     match /publicLessons/{lessonId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated()
@@ -41,19 +35,19 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
     }
 
-    // ─── User categories ─────────────────────────────────────────────────────
+    // ─── User categories ─────────────────────────────────────────────────
     match /users/{userId}/categories/{catId} {
       allow read, write: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
     }
 
-    // ─── Progress ────────────────────────────────────────────────────────────
+    // ─── Progress ────────────────────────────────────────────────────────
     match /users/{userId}/progress/{progressId} {
       allow read, write: if isAuthenticated()
                           && request.auth.uid == userId
                           && resource.data.userId == request.auth.uid;
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
+    // ─── Helpers ─────────────────────────────────────────────────────────
 
     function isAuthenticated() {
       return request.auth != null;
@@ -61,10 +55,8 @@ service cloud.firestore {
 
     /** True while the account is in its first 7 days (cool-down period). */
     function isCooldown(uid) {
-      var ref = /databases/$(database)/documents/users/$(uid);
-      if (!exists(ref)) return true;
-      var cdUntil = get(ref).data.cooldownUntil;
-      return cdUntil > request.time.millis;
+      if (!exists(/databases/$(database)/documents/users/$(uid))) return true;
+      return get(/databases/$(database)/documents/users/$(uid)).data.cooldownUntil > request.time.millis;
     }
   }
 }
