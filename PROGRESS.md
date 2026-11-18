@@ -54,7 +54,7 @@
 - Example setup: `private-setup.example/README.md` — committed template (no secrets)
 - `.env.example` — placeholder config values
 - `.gitignore` — excludes `private-setup/`, `.env*`, `node_modules/`, `dist/`
-- ESLint configuration: `.eslintrc.cjs`
+- ESLint configuration: `eslint.config.js` (flat config, ESLint 10 compatible)
 - Comprehensive `README.md` covering setup, GitHub Pages deployment, free-tier quotas, accessibility
 
 ## 🔄 In Progress
@@ -68,6 +68,11 @@ All core implementation is complete. Remaining optional improvements:
 2. Unit/integration tests (optional, not required by spec)
 3. First deployment to GitHub Pages to validate end-to-end flow
 4. Tailwind CSS v4 migration (blocked — requires full CSS rewrite, not worth the risk)
+5. Close stale Dependabot PRs #1, #2, #3 — superseded by manual migration commit `37efcfe`
+   - PR #1: `chore(deps): bump the npm_and_yarn group across 1 directory with 3 updates`
+   - PR #2: `chore(deps): bump esbuild and vite`
+   - PR #3: `chore:(deps): bump the all-dependencies group with 81 updates`
+   - All three were failing CI and are now redundant
 
 ## ⚠️ Known Issues
 

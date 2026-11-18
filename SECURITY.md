@@ -32,9 +32,17 @@ Please report security vulnerabilities via GitHub Issues with the label **securi
 
 ### Transitive Dependency Vulnerabilities
 
-The project uses Firebase Web SDK v10 which has known transitive vulnerabilities in its dependencies (`@grpc/grpc-js`, `esbuild`, `glob`). These are inherent to the Firebase SDK architecture and cannot be resolved without major breaking changes.
+As of v1.2.6, the project has **8 vulnerabilities** (4 moderate, 4 high), reduced from 39 through a major dependency migration (see commit `37efcfe`). The remaining vulnerabilities are **accepted risks** inherent to the Firebase SDK and its toolchain:
 
-**Mitigation**: The vulnerabilities affect server-side gRPC connections, not client-side API requests. The app's own codebase has no direct input validation bypass or injection vectors.
+| Vulnerability | Severity | Package | Risk |
+|--------------|----------|---------|------|
+| `@grpc/grpc-js` | 🔴 High | Firebase Firestore | Inherent to Firebase SDK — no client-side fix available |
+| `glob` (via `workbox-build`) | 🟡 Moderate | `vite-plugin-pwa` | Transitive — affects service worker build tooling only |
+| `minimatch` (via `workbox-build`) | 🟡 Moderate | `vite-plugin-pWA` | Transitive — same as above |
+
+**Why these are accepted**: The vulnerabilities affect server-side gRPC connections and build tooling, not client-side API requests or user input. The app's own codebase has no direct injection vectors. A stricter version would require a paid backend or a complete move away from Firebase.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the full dependency tree and rationale.
 
 ## Configuration Checklist
 

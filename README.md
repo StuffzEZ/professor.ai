@@ -3,19 +3,20 @@
 <div align="center">
 
 [![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.2.5-blue)]()
+[![Version](https://img.shields.io/badge/version-1.2.6-blue)]()
 [![Build Status](https://github.com/StuffzEZ/professor.ai/actions/workflows/ci.yml/badge.svg)](https://github.com/StuffzEZ/professor.ai/actions)
 [![Dependabot](https://img.shields.io/badge/dependabot-active-green)](https://github.com/StuffzEZ/professor.ai/blob/main/.github/dependabot.yml)
 [![Issues](https://img.shields.io/github/issues/StuffzEZ/professor.ai)](https://github.com/StuffzEZ/professor.ai/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/StuffzEZ/professor.ai)](https://github.com/StuffzEZ/professor.ai/pulls)
 [![Last Commit](https://img.shields.io/github/last-commit/StuffzEZ/professor.ai)](https://github.com/StuffzEZ/professor.ai/commits/main)
 [![CodeQL](https://github.com/StuffzEZ/professor.ai/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/StuffzEZ/professor.ai/security/code-scanning)
+[![Vulnerabilities](https://img.shields.io/badge/vulnerabilities-8-orange)](SECURITY.md)
 
 An AI-powered coding learning platform focused on **goal-driven, project-based learning**.
 Generates interactive lessons that build toward a learner's stated end goal — by the
 end of a course, you have actually built what you asked for.
 
-**Tech:** Vite · React 18 · TypeScript · Tailwind CSS · Firebase Spark
+**Tech:** Vite 8 · React 19 · TypeScript · Tailwind CSS 3 · Firebase 13 · Spark Plan
 
 </div>
 
@@ -95,6 +96,27 @@ A workflow is provided at [`.github/workflows/deploy.yml`](.github/workflows/dep
 - **Monthly publishes**: 10 max per account
 - **Auth methods**: Email/Password, Google, GitHub
 - **Bot protection**: reCAPTCHA Enterprise via Firebase App Check
+
+---
+
+## 📊 Progress Tracker
+
+| Milestone | Status | Notes |
+|-----------|--------|-------|
+| Core architecture & routing | ✅ Complete | v1.0.0 |
+| Firebase auth & Firestore | ✅ Complete | v1.1.0 |
+| Onboarding & settings | ✅ Complete | v1.2.0 |
+| Dashboard & category cards | ✅ Complete | v1.2.1 |
+| Lesson creation flow | ✅ Complete | v1.2.2 |
+| Lesson player & progress | ✅ Complete | v1.2.3 |
+| Adaptive chat bar | ✅ Complete | v1.2.4 |
+| Sharing & public discovery | ✅ Complete | v1.2.5 |
+| Dependency migration (39→8 vulns) | ✅ Complete | v1.2.6 |
+| Dependabot PRs #1, #2, #3 | ❌ Open | Superseded by manual migration |
+| GitHub Pages deployment | ✅ Ready | Workflow configured |
+| CodeQL scanning | ✅ Passing | CI workflow active |
+
+**Current version:** `1.2.6` · **Next:** Close stale Dependabot PRs
 
 ---
 
