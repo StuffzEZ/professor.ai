@@ -1,4 +1,4 @@
-import { POLLINATIONS_URL, POLLINATIONS_MODEL, professorEndpoint } from '../config';
+import { POLLINATIONS_URL, POLLINATIONS_MODEL, professorEndpoint, hasProfessorKey } from '../config';
 import type { ProviderId } from '../types';
 
 export interface AiMessage {
@@ -83,7 +83,7 @@ export const professorProvider: AiProvider = {
   id: 'professor',
   name: 'Professor AI',
   chat: (messages, opts) => {
-    if (professorEndpoint.url) {
+    if (professorEndpoint.url && hasProfessorKey) {
       return openAiCompatibleChat(
         professorEndpoint.url,
         professorEndpoint.key || undefined,
@@ -92,6 +92,7 @@ export const professorProvider: AiProvider = {
         opts
       );
     }
+    // No dedicated endpoint or no key — fall back to free Pollinations AI.
     return openAiCompatibleChat(POLLINATIONS_URL, undefined, POLLINATIONS_MODEL, messages, opts);
   },
 };

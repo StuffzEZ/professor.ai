@@ -2,7 +2,7 @@ import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { getAuth, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
-import { isFirebaseConfigured, appCheckKey } from './config';
+import { isFirebaseConfigured, appCheckKey, appCheckEnabled } from './config';
 
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
@@ -34,14 +34,17 @@ export function initFirebase(): { app: FirebaseApp; auth: Auth; db: Firestore } 
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
   });
 
-  if (appCheckKey) {
-    try {
+  // App Check (reCAPTCHA Enterprise) is opt-in only — see config.ts.
+    // A misconfigured key returns HTTP 400 and blocks ALL auth, so it must
+    // never be enabled by accident. Set VITE_APPCHECK_ENABLED=true after the
+    // deployment domain is registered in the reCAPTCHA Enterprise console.
+    if (appCheckEnabled && appCheckKey) {
+      try {
         initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(appCheckKey) });
-    } catch (err) {
-      // App Check is best-effort at init; failures surface on first request.
-      console.warn('App Check initialisation failed:', err);
+      } catch (err) {
+        console.warn('App Check initialisation failed:', err);
+      }
     }
-  }
 
   auth = getAuth(app);
   db = getFirestore(app);

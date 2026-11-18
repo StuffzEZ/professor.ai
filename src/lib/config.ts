@@ -19,11 +19,26 @@ export const firebaseConfig = {
 
 export const appCheckKey = import.meta.env.VITE_APPCHECK_KEY ?? '';
 
+/**
+ * App Check must be explicitly enabled via VITE_APPCHECK_ENABLED=true.
+ * It is OFF by default because a misconfigured reCAPTCHA Enterprise site key
+ * (wrong domain, expired key, etc.) returns HTTP 400 and blocks ALL auth.
+ * Enable only after the deployment domain is registered in the
+ * reCAPTCHA Enterprise console.
+ */
+export const appCheckEnabled = import.meta.env.VITE_APPCHECK_ENABLED === 'true';
+
 export const professorEndpoint = {
   url: import.meta.env.VITE_PROFESSOR_API_URL ?? '',
   key: import.meta.env.VITE_PROFESSOR_API_KEY ?? '',
   model: import.meta.env.VITE_PROFESSOR_MODEL ?? 'gpt-4o-mini',
 };
+
+/**
+ * Whether the Professor AI endpoint key is actually present at build time.
+ * When false, the app falls back to Pollinations AI (free, keyless).
+ */
+export const hasProfessorKey = Boolean(professorEndpoint.key);
 
 /** True when the Firebase web config has been filled in. */
 export const isFirebaseConfigured =

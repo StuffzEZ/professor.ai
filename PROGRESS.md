@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2026-11-18 (v1.2.6 — major dependency migration, vulnerability reduction)
+> Last updated: 2026-11-18 (v1.2.7 — App Check opt-in, API key safety, production testing)
 
 ## ✅ Done
 
@@ -59,23 +59,32 @@
 
 ## 🔄 In Progress
 
-- Nothing — all core features implemented and dependencies upgraded
+- App Check opt-in migration (v1.2.7) — see Known Issues below
 
 ## 📋 Next
 
-All core implementation is complete. Remaining optional improvements:
-1. PWA PNG icons (currently SVG fallback in `manifest.json`)
-2. Unit/integration tests (optional, not required by spec)
-3. First deployment to GitHub Pages to validate end-to-end flow
-4. Tailwind CSS v4 migration (blocked — requires full CSS rewrite, not worth the risk)
-5. Close stale Dependabot PRs #1, #2, #3 — superseded by manual migration commit `37efcfe`
-   - PR #1: `chore(deps): bump the npm_and_yarn group across 1 directory with 3 updates`
-   - PR #2: `chore(deps): bump esbuild and vite`
-   - PR #3: `chore:(deps): bump the all-dependencies group with 81 updates`
-   - All three were failing CI and are now redundant
+1. **Register the deployment domain in reCAPTCHA Enterprise console** — required before
+   App Check can be enabled. The site key `6LfTQyUuAAAAAMoCzEkcTw7FHr8XLt1Q4xKcxhZy`
+   currently returns HTTP 400 for `professorai.stufy.qzz.io`.
+2. Close stale Dependabot PRs #1, #2, #3 manually at
+   https://github.com/StuffzEZ/professor.ai/pulls (no GitHub token available for API access)
+3. PWA PNG icons (currently SVG fallback in `manifest.json`)
+4. Unit/integration tests (optional, not required by spec)
+5. Tailwind CSS v4 migration (blocked — requires full CSS rewrite, not worth the risk)
 
 ## ⚠️ Known Issues
 
+- **App Check blocks all sign-in (CRITICAL, fixed v1.2.7)**: The reCAPTCHA Enterprise
+  site key `6LfTQyUuAAAAAMoCzEkcTw7FHr8XLt1Q4xKcxhZy` returns HTTP 400 when Firebase
+  tries to fetch a token. This blocked every sign-in method (Google, GitHub, Email)
+  on the production deployment at `https://professorai.stufy.qzz.io`.
+  **Fix**: App Check is now opt-in (`VITE_APPCHECK_ENABLED` must be `true`). It is OFF
+  by default so auth works immediately. Re-enable only after the deployment domain is
+  registered in the reCAPTCHA Enterprise console.
+- **API key exposure in build**: The `VITE_PROFESSOR_API_KEY` env var is injected at
+  build time and never written to disk. Verified: no `professor_api_key` or
+  `professor_api_url` strings appear in the `dist/` output. The only values present
+  are Firebase web config (public by design) and the empty Pollinations fallback URL.
 - PWA PNG icons not generated (SVG fallback in `manifest.json`)
 - Public icon fonts (Inter/JetBrains Mono) require internet; fallback stacks included
 - No unit/integration tests written yet (out of scope per request)

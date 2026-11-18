@@ -14,13 +14,15 @@
 
 **Trade-off:** Client-side code is visible to users, so quotas must be enforced in Firestore rules (not just client-side). We do this.
 
-## 2. App Check (reCAPTCHA Enterprise) for Bot Deterrence
+## 2. App Check (reCAPTCHA Enterprise) for Bot Deterrence — OPT-IN
 
-**Decision:** Integrate Firebase App Check with reCAPTCHA Enterprise at app init.
+**Decision:** Integrate Firebase App Check with reCAPTCHA Enterprise, but make it **opt-in** (`VITE_APPCHECK_ENABLED` must be `true`). It is OFF by default.
 
 **Why:** On the free tier, there's no server to run server-side rate limiting. App Check is the best available bot-deterrence. It's best-effort — we document this honestly.
 
-**Trade-off:** reCAPTCHA Enterprise is not a guarantee. Bots can still bypass it. We mitigate with per-account quotas in Firestore rules and disposable email domain blocking.
+**Why opt-in:** A misconfigured reCAPTCHA Enterprise site key (wrong domain, expired key, etc.) returns HTTP 400 and blocks **all** auth. During production testing on `professorai.stufy.qzz.io`, every sign-in method (Google, GitHub, Email) failed with this exact error. Making App Check opt-in means the app stays usable while the domain registration is in progress, and prevents accidental lockout from a bad key.
+
+**Trade-off:** reCAPTCHA Enterprise is not a guarantee. Bots can still bypass it. We mitigate with per-account quotas in Firestore rules and disposable email domain blocking. Without App Check enabled, there is no bot deterrence — rely on Firestore rules and email verification.
 
 ## 3. Pollinations AI as Default Fallback
 

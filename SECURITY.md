@@ -23,7 +23,7 @@ Please report security vulnerabilities via GitHub Issues with the label **securi
 
 ### Authentication & Abuse Prevention
 
-- Firebase App Check with reCAPTCHA Enterprise reduces bot traffic
+- Firebase App Check with reCAPTCHA Enterprise reduces bot traffic (opt-in — OFF by default)
 - Verified email required for lesson generation and publishing
 - Disposable email domain blocklist prevents throwaway accounts
 - New account cooldown (7 days) limits rapid account creation
@@ -49,7 +49,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the full dependency tree and rational
 Before deploying, verify these settings in Firebase Console:
 
 - [ ] Firestore rules published from `firestore/firestore.rules`
-- [ ] App Check enabled with reCAPTCHA Enterprise
+- [ ] App Check enabled with reCAPTCHA Enterprise (opt-in — set VITE_APPCHECK_ENABLED=true after domain registration)
 - [ ] Authorized domains added under Authentication → Settings
 - [ ] All auth providers (Email/Password, Google, GitHub) enabled
 - [ ] Email template configured for verification flows

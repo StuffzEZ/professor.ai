@@ -66,7 +66,7 @@ At minimum:
 2. Enable **Email/Password**, **Google**, and **GitHub** sign-in providers
 3. Create a Firestore database (start in test mode — rules will lock it down)
 4. Copy the web app config values
-5. Register an App Check reCAPTCHA Enterprise site key (recommended)
+5. Register an App Check reCAPTCHA Enterprise site key (opt-in — see private-setup/README.md)
 6. Add your domain(s) to the authorised domains list
 
 ### Install & Run
@@ -95,7 +95,7 @@ A workflow is provided at [`.github/workflows/deploy.yml`](.github/workflows/dep
 - **Daily generations**: 5 (established), 2 (new accounts)
 - **Monthly publishes**: 10 max per account
 - **Auth methods**: Email/Password, Google, GitHub
-- **Bot protection**: reCAPTCHA Enterprise via Firebase App Check
+- **Bot protection**: reCAPTCHA Enterprise via Firebase App Check (opt-in — OFF by default)
 
 ---
 

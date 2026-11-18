@@ -17,7 +17,7 @@ src/
 ├── lib/              # Core libraries
 │   ├── types.ts      # TypeScript domain models
 │   ├── config.ts     # Vite env var centralization
-│   ├── firebase.ts   # Firebase init (one-time, with App Check reCAPTCHA Enterprise)
+│   ├── firebase.ts   # Firebase init (one-time, App Check opt-in)
 │   ├── store.ts      # Firestore data layer (pagination, batches, quotas)
 │   ├── auth.ts       # Auth helpers (dedupe, disposable domains)
 │   ├── utils.ts      # Utility functions

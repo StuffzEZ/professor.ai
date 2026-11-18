@@ -24,7 +24,7 @@ src/
 ├── lib/                    # Core libraries
 │   ├── types.ts            # Domain models (LessonPlan, Category, UserProfile)
 │   ├── config.ts           # Centralized Vite env vars
-│   ├── firebase.ts         # Firebase init + App Check reCAPTCHA Enterprise
+│   ├── firebase.ts         # Firebase init + App Check (opt-in)
 │   ├── store.ts            # Firestore data layer (pagination, batches, quotas)
 │   ├── auth.ts             # Auth helpers (dedupe, disposable domains)
 │   ├── utils.ts            # Utility functions (cn() tailwind-merge wrapper)
@@ -176,18 +176,24 @@ Firebase Spark free tier: 50,000 reads/day, 20,000 writes/day. This app operates
 
 ## Security Measures
 
-### Firebase App Check (reCAPTCHA Enterprise)
+### Firebase App Check (reCAPTCHA Enterprise) — OPT-IN
 
-Prevents automated abuse by attaching verification tokens to every Auth/Firestore request. Configured in `src/lib/firebase.ts`:
+Prevents automated abuse by attaching verification tokens to every Auth/Firestore request. Configured in `src/lib/firebase.ts`. **App Check is OFF by default** — a misconfigured site key returns HTTP 400 and blocks ALL auth, so it must never be enabled by accident.
 
 ```typescript
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
+import { appCheckEnabled, appCheckKey } from './config';
 
-initializeAppCheck(app, {
-  provider: new ReCaptchaEnterpriseProvider(import.meta.env.VITE_APPCHECK_KEY),
-  isTokenAutoRefreshEnabled: true,
-});
+// Only initialise when explicitly enabled AND a key is present.
+if (appCheckEnabled && appCheckKey) {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider(appCheckKey),
+    isTokenAutoRefreshEnabled: true,
+  });
+}
 ```
+
+Set `VITE_APPCHECK_ENABLED=true` in `.env.local` (and as a GitHub Actions secret) only after the deployment domain is registered in the reCAPTCHA Enterprise console.
 
 ### Email Verification Gate
 
