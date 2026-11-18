@@ -32,10 +32,9 @@ export default function DiscoverPage() {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadLessons();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      loadLessons();
+    }, []);
 
   async function copyLesson(lesson: PublicLessonSummary) {
     if (!user) return;
