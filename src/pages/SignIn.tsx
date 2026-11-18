@@ -54,7 +54,7 @@ export default function SignIn() {
         defaultDifficulty: 'intermediate' as Difficulty,
         onboardingComplete: false,
         createdAt: new Date().toISOString(),
-        cooldownUntil: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        cooldownUntil: new Date().getTime() + 7 * 24 * 60 * 60 * 1000,
       });
       navigate('/onboarding');
     } catch (err: unknown) {
@@ -91,7 +91,7 @@ export default function SignIn() {
         defaultDifficulty: 'intermediate' as Difficulty,
         onboardingComplete: false,
         createdAt: new Date().toISOString(),
-        cooldownUntil: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        cooldownUntil: new Date().getTime() + 7 * 24 * 60 * 60 * 1000,
       });
       navigate('/onboarding');
     } catch (err: unknown) {

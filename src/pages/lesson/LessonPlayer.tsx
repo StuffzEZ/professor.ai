@@ -252,7 +252,6 @@ function QuizSection({
                     prevScores[`${q.id}-${oi}`] = isCorrect ? 1 : 0;
                     if (isCorrect) prevScores[q.id] = 1;
                     else prevScores[q.id] = 0;
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     onAnswer(q.id, oi, isCorrect);
                   }}
                 >

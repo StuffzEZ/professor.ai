@@ -64,7 +64,7 @@ export default function AdaptiveChatBar({
         hintsSeen,
       }, provider);
       setMessages((m) => [...m, { role: 'assistant', content: reply }]);
-    } catch (err) {
+    } catch (_err) {
       setMessages((m) => [
         ...m,
         {

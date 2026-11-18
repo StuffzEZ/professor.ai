@@ -87,13 +87,16 @@ export function CreateFlow() {
     setGenerating(true);
     try {
       const catRes = await findOrCreateCategory(user.uid, generated.categoryName, generated.categoryIcon);
-      generated.categoryId = catRes.category.id;
-      generated.visibility = visibility;
-      generated.ownerId = user.uid;
-      generated.ownerName = user.displayName || user.email!.split('@')[0];
-      generated.createdAt = new Date().toISOString();
+      const lessonData: LessonPlan = {
+        ...generated,
+        categoryId: catRes.category.id,
+        visibility,
+        ownerId: user.uid,
+        ownerName: user.displayName || user.email!.split('@')[0],
+        createdAt: new Date().toISOString(),
+      };
 
-      await saveLesson(generated as LessonPlan);
+      await saveLesson(lessonData);
       if (visibility === 'public') {
         // publish handled separately
       }

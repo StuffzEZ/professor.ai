@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2025-01-15 (v1.2.4 — reCAPTCHA Enterprise, Dependabot, CI + PR templates)
+> Last updated: 2026-11-18 (v1.2.6 — major dependency migration, vulnerability reduction)
 
 ## ✅ Done
 
@@ -28,6 +28,16 @@
 - GitHub Actions: `.github/workflows/deploy.yml` — builds and deploys to GitHub Pages
 - CI: `.github/workflows/ci.yml` — lint + typecheck + build on every push and PR
 - Issue templates: `.github/ISSUE_TEMPLATE/bug-report.yml`, `feature-request.yml`, `config.yml`
+- **Major dependency migration** (v1.2.6):
+  - `firebase` 10 → 13.4.0 (resolves undici high vulnerabilities)
+  - `react` 18 → 19.3.1, `react-dom` 18 → 19.3.1
+  - `react-router-dom` 6 → 7.18.5
+  - `vite` 5 → 8.3.8, `@vitejs/plugin-react` 4 → 6.3.0
+  - `eslint` 8 → 10.15.0 (flat config via `eslint.config.js`)
+  - `@typescript-eslint/*` 6 → 8.73.0
+  - `eslint-plugin-react-hooks` 4 → 7.1.1
+  - `vite-plugin-pwa` 0.19 → 2.0.0
+  - Vulnerabilities reduced from **39 → 8** (4 moderate, 4 high)
 - PR template: `.github/pull_request_template.md`
 - CODEOWNERS: `.github/CODEOWNERS` — @stufy reviews all PRs
 - Dependabot: `.github/dependabot.yml` — weekly npm updates, grouped into single PRs
@@ -49,8 +59,7 @@
 
 ## 🔄 In Progress
 
-- Final lint cleanup and build verification — done
-- README complete — done
+- Nothing — all core features implemented and dependencies upgraded
 
 ## 📋 Next
 
@@ -58,12 +67,17 @@ All core implementation is complete. Remaining optional improvements:
 1. PWA PNG icons (currently SVG fallback in `manifest.json`)
 2. Unit/integration tests (optional, not required by spec)
 3. First deployment to GitHub Pages to validate end-to-end flow
+4. Tailwind CSS v4 migration (blocked — requires full CSS rewrite, not worth the risk)
 
 ## ⚠️ Known Issues
 
 - PWA PNG icons not generated (SVG fallback in `manifest.json`)
 - Public icon fonts (Inter/JetBrains Mono) require internet; fallback stacks included
 - No unit/integration tests written yet (out of scope per request)
+- **8 remaining transitive vulnerabilities** (4 moderate, 4 high) — down from 39:
+  - `@grpc/grpc-js` (high, inherent to Firebase SDK) — `@firebase/firestore` pins `~1.9.0`, cannot be upgraded without Firebase releasing a newer version
+  - `workbox-build` → `glob` (moderate) and `minimatch` (moderate) — transitive via `vite-plugin-pwa`, only fixable by downgrading PWA plugin
+  - **These are acceptable risks** — no viable upgrade path exists without breaking core functionality
 
 ## 📝 BACKLOG
 
