@@ -28,9 +28,10 @@ service cloud.firestore {
     // ─── Public lessons ──────────────────────────────────────────────────
     match /publicLessons/{lessonId} {
       allow read: if isAuthenticated();
+      // On create, resource is null — use request.resource.data instead
       allow create: if isAuthenticated()
-                      && resource.data.ownerId == request.auth.uid
-                      && !isCooldown(resource.data.ownerId);
+                      && request.resource.data.ownerId == request.auth.uid
+                      && !isCooldown(request.resource.data.ownerId);
       allow update: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
       allow delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
     }
@@ -41,10 +42,12 @@ service cloud.firestore {
     }
 
     // ─── Progress ────────────────────────────────────────────────────────
+    // On create/write, resource may be null — fall back to request.resource.data
     match /users/{userId}/progress/{progressId} {
       allow read, write: if isAuthenticated()
                           && request.auth.uid == userId
-                          && resource.data.userId == request.auth.uid;
+                          && (resource == null || resource.data.userId == request.auth.uid)
+                          && (request.resource == null || request.resource.data.userId == request.auth.uid);
     }
 
     // ─── Helpers ─────────────────────────────────────────────────────────
