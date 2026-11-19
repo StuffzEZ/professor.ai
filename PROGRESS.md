@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2026-11-18 (v1.2.7 — App Check opt-in, API key safety, production testing)
+> Last updated: 2026-11-18 (v1.2.10 — build-time API key removal, CodeQL fixes, dependency cleanup)
 
 ## ✅ Done
 
@@ -65,17 +65,39 @@
 - ESLint configuration: `eslint.config.js` (flat config, ESLint 10 compatible)
 - Comprehensive `README.md` covering setup, GitHub Pages deployment, free-tier quotas, accessibility
 
+- **v1.2.9 — build-time API key removal + CodeQL fixes**:
+  - Removed `VITE_PROFESSOR_API_URL` / `VITE_PROFESSOR_API_KEY` / `VITE_PROFESSOR_MODEL`
+    from build config, `deploy.yml`, `.env.example`, and `vite-env.d.ts`. Vite bakes all
+    `VITE_*` vars into the JS bundle, which is public on GitHub Pages — the Professor AI
+    endpoint URL and key were being leaked to anyone who read the bundle.
+  - The "Professor AI" provider now always uses Pollinations AI (free, keyless).
+    Custom endpoints are configured at runtime in Settings (localStorage, never in bundle).
+  - Fixed CodeQL alerts #1–4 (bad HTML filtering regexp, incomplete multi-character
+    sanitization, double escaping) in `src/lib/ai/docs.ts` by replacing regex-based HTML
+    stripping with a DOMParser-based `sanitizeHtml()` (with a safe regex fallback).
+  - Verified: `dist/` contains no `private-ai-gateway`, `freellmapi-`, or `VITE_PROFESSOR` strings.
+- **v1.2.10 — dependency cleanup**:
+  - Removed accidental direct `@grpc/grpc-js` dependency (it's transitive via Firebase).
+  - Reverted `react`/`react-dom` to 18 and `react-router-dom` to 6 in `package.json`
+    to match the app's actual runtime (the v1.2.6 migration to React 19 / router 7 was
+    never fully validated; the app is written against React 18 APIs).
+  - Removed invalid `allow` block from `dependabot.yml` (caused "property of type array
+    did not match object" parse error).
+  - Stale Dependabot PRs #1, #2, #4 branched from old commits — close them manually at
+    https://github.com/StuffzEZ/professor.ai/pulls (no PR-close API available in this session).
+
 ## 🔄 In Progress
 
-- App Check opt-in migration (v1.2.7) — see Known Issues below
+- None — all security fixes committed and pushed.
 
 ## 📋 Next
 
-1. **Register the deployment domain in reCAPTCHA Enterprise console** — required before
+1. **Close stale Dependabot PRs #1, #2, #4** manually at
+   https://github.com/StuffzEZ/professor.ai/pulls (they branched from old commits;
+   the dependency updates they contain are already in main).
+2. **Register the deployment domain in reCAPTCHA Enterprise console** — required before
    App Check can be enabled. The site key `6LfTQyUuAAAAAMoCzEkcTw7FHr8XLt1Q4xKcxhZy`
    currently returns HTTP 400 for `professorai.stufy.qzz.io`.
-2. Close stale Dependabot PRs #1, #2, #3 manually at
-   https://github.com/StuffzEZ/professor.ai/pulls (no GitHub token available for API access)
 3. PWA PNG icons (currently SVG fallback in `manifest.json`)
 4. Unit/integration tests (optional, not required by spec)
 5. Tailwind CSS v4 migration (blocked — requires full CSS rewrite, not worth the risk)
@@ -89,10 +111,11 @@
   **Fix**: App Check is now opt-in (`VITE_APPCHECK_ENABLED` must be `true`). It is OFF
   by default so auth works immediately. Re-enable only after the deployment domain is
   registered in the reCAPTCHA Enterprise console.
-- **API key exposure in build**: The `VITE_PROFESSOR_API_KEY` env var is injected at
-  build time and never written to disk. Verified: no `professor_api_key` or
-  `professor_api_url` strings appear in the `dist/` output. The only values present
-  are Firebase web config (public by design) and the empty Pollinations fallback URL.
+- **API key exposure in build (FIXED v1.2.9)**: The `VITE_PROFESSOR_*` env vars were
+  previously injected at build time, leaking the Professor AI endpoint URL and key into
+  the public JS bundle. Removed entirely — the default provider now uses Pollinations AI
+  (keyless), and custom endpoints are stored in localStorage at runtime. Verified: no
+  `private-ai-gateway`, `freellmapi-`, or `VITE_PROFESSOR` strings in `dist/`.
 - PWA PNG icons not generated (SVG fallback in `manifest.json`)
 - Public icon fonts (Inter/JetBrains Mono) require internet; fallback stacks included
 - No unit/integration tests written yet (out of scope per request)
@@ -109,4 +132,7 @@
 |------|----------------|--------|
 | Fix Firestore rules parser errors | "warning: Error saving rules - Line 22: Unexpected 'matches'.; Line 22: token recognition error at: '\'; Line 22: Unexpected '-'.; Line 22: token recognition error at: '\'; Line 22: Unexpected '-'.; Line 22: token recognition error at: '\'; Line 22: Unexpected '$'.; Line 65: Unexpected 'if'.; Line 66: mismatched input 'let' expecting '}' firestore rules" | ✅ Done (v1.2.3) |
 | Re-fix rules after v1.2.2 still failed | "Error saving rules - Line 22: Unexpected 'matches'.; Line 64: Unexpected 'var'.; Line 64: Missing 'match' keyword before path.; Line 64: Forward slash '/' found where identifier or binding expected.; Line 64: mismatched input '$' expecting {'{', '/', PATH_SEGMENT}; Line 64: Missing 'match' keyword before path.; Line 64: Forward slash '/' found where identifier or binding expected.; Line 64: mismatched input '$' expecting {'{', '/', PATH_SEGMENT}; Line 70: Unexpected '}'." | ✅ Done (v1.2.3) |
+| Remove VITE_PROFESSOR_* from build bundle | "when i go to log in which has a popup window in the popup window url it has firebase url then ?apikey=.... and api key is shown in network tab" + user concern about GitHub Actions builds leaking tokens | ✅ Done (v1.2.9) |
+| Fix CodeQL HTML sanitization alerts #1-4 | "Incomplete multi-character sanitization", "Double escaping", "Bad HTML filtering regexp" | ✅ Done (v1.2.9) |
+| Close stale Dependabot PRs #1, #2, #4 | Manual action required — no GitHub API available | ⏳ Pending |
 
