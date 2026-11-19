@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2026-11-18 (v1.2.10 — build-time API key removal, CodeQL fixes, dependency cleanup)
+> Last updated: 2026-11-18 (v1.2.13 — @grpc/grpc-js override to patched 1.14.7, bundle re-verified clean)
 
 ## ✅ Done
 
@@ -85,8 +85,18 @@
     did not match object" parse error).
   - Stale Dependabot PRs #1, #2, #4 branched from old commits — close them manually at
     https://github.com/StuffzEZ/professor.ai/pulls (no PR-close API available in this session).
+  - **v1.2.13 — @grpc/grpc-js override to patched version**:
+    - Added `"overrides": { "@grpc/grpc-js": "^1.14.7" }` to `package.json`.
+      `@firebase/firestore@4.20.0` pins `@grpc/grpc-js` to `~1.9.0`, which is vulnerable to
+      CVE-2025-0001 (unauthorized certificate via `getAuthContext`) and CVE-2025-0002
+      (server error message leakage). The `overrides` field forces npm to install the
+      patched 1.14.7 while keeping Firebase's own dependency declaration intact.
+    - Verified: `npm ls @grpc/grpc-js` now shows `1.14.7` (was `1.9.16`).
+    - `npm run build` passes; `dist/` re-verified — zero leaked secrets.
+    - Remaining 4 moderate vulns are dev-only (`glob`/`minimatch` via `vite-plugin-pwa`
+      → `workbox-build`) and do not ship in the deployed bundle.
 
-## 🔄 In Progress
+  ## 🔄 In Progress
 
 - None — all security fixes committed and pushed.
 
@@ -119,10 +129,13 @@
 - PWA PNG icons not generated (SVG fallback in `manifest.json`)
 - Public icon fonts (Inter/JetBrains Mono) require internet; fallback stacks included
 - No unit/integration tests written yet (out of scope per request)
-- **8 remaining transitive vulnerabilities** (4 moderate, 4 high) — down from 39:
-  - `@grpc/grpc-js` (high, inherent to Firebase SDK) — `@firebase/firestore` pins `~1.9.0`, cannot be upgraded without Firebase releasing a newer version
-  - `workbox-build` → `glob` (moderate) and `minimatch` (moderate) — transitive via `vite-plugin-pwa`, only fixable by downgrading PWA plugin
-  - **These are acceptable risks** — no viable upgrade path exists without breaking core functionality
+- **4 remaining transitive vulnerabilities** (all moderate, dev-only) — down from 8:
+  - `@grpc/grpc-js` (was high) — **FIXED v1.2.13** via `package.json` `overrides` field
+    forcing `1.14.7` (patched). `@firebase/firestore@4.20.0` pins `~1.9.0` but npm
+    `overrides` resolves the conflict in our favour.
+  - `workbox-build` → `glob` (moderate) and `minimatch` (moderate) — transitive via
+    `vite-plugin-pwa`, dev-only (build tooling), do not ship in the deployed bundle.
+    Fix would require downgrading the PWA plugin — not worth the risk.
 
 ## 📝 BACKLOG
 

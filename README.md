@@ -3,14 +3,14 @@
 <div align="center">
 
 [![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.2.6-blue)]()
+[![Version](https://img.shields.io/badge/version-1.2.13-blue)]()
 [![Build Status](https://github.com/StuffzEZ/professor.ai/actions/workflows/ci.yml/badge.svg)](https://github.com/StuffzEZ/professor.ai/actions)
 [![Dependabot](https://img.shields.io/badge/dependabot-active-green)](https://github.com/StuffzEZ/professor.ai/blob/main/.github/dependabot.yml)
 [![Issues](https://img.shields.io/github/issues/StuffzEZ/professor.ai)](https://github.com/StuffzEZ/professor.ai/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/StuffzEZ/professor.ai)](https://github.com/StuffzEZ/professor.ai/pulls)
 [![Last Commit](https://img.shields.io/github/last-commit/StuffzEZ/professor.ai)](https://github.com/StuffzEZ/professor.ai/commits/main)
 [![CodeQL](https://github.com/StuffzEZ/professor.ai/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/StuffzEZ/professor.ai/security/code-scanning)
-[![Vulnerabilities](https://img.shields.io/badge/vulnerabilities-8-orange)](SECURITY.md)
+[![Vulnerabilities](https://img.shields.io/badge/vulnerabilities-4-orange)](SECURITY.md)
 
 An AI-powered coding learning platform focused on **goal-driven, project-based learning**.
 Generates interactive lessons that build toward a learner's stated end goal — by the
@@ -113,10 +113,12 @@ A workflow is provided at [`.github/workflows/deploy.yml`](.github/workflows/dep
 | Sharing & public discovery | ✅ Complete | v1.2.5 |
 | Dependency migration (39→8 vulns) | ✅ Complete | v1.2.6 |
 | Dependabot PRs #1, #2, #3 | ❌ Open | Superseded by manual migration |
+| Build-time API key safety & CodeQL fixes | ✅ Complete | v1.2.9 |
 | GitHub Pages deployment | ✅ Ready | Workflow configured |
 | CodeQL scanning | ✅ Passing | CI workflow active |
+| @grpc/grpc-js override (CVEs #24, #25) | ✅ Complete | v1.2.13 |
 
-**Current version:** `1.2.6` · **Next:** Close stale Dependabot PRs
+**Current version:** `1.2.13` · **Next:** Close stale Dependabot PRs #1, #2, #4
 
 ---
 
