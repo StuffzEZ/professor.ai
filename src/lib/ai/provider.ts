@@ -1,4 +1,4 @@
-import { POLLINATIONS_URL, POLLINATIONS_MODEL, professorEndpoint, hasProfessorKey } from '../config';
+import { POLLINATIONS_URL, POLLINATIONS_MODEL } from '../config';
 import type { ProviderId } from '../types';
 
 export interface AiMessage {
@@ -74,27 +74,16 @@ export class AiError extends Error {
 /**
  * The default "Professor AI" provider.
  *
- * When a dedicated endpoint is configured (VITE_PROFESSOR_API_URL) it is used.
- * Otherwise it transparently falls back to Pollinations AI so the app works
- * out of the box on the free tier. Either way, client-side + Firestore quota
- * limits apply (see store.reserveGeneration).
+ * Uses Pollinations AI (free, keyless, open-source) under the hood. This is
+ * the only safe option for a static GitHub Pages deployment: no API key is
+ * ever baked into the JS bundle. Users who want a custom endpoint configure
+ * it in Settings — the value is stored in localStorage, never in the bundle.
  */
 export const professorProvider: AiProvider = {
   id: 'professor',
   name: 'Professor AI',
-  chat: (messages, opts) => {
-    if (professorEndpoint.url && hasProfessorKey) {
-      return openAiCompatibleChat(
-        professorEndpoint.url,
-        professorEndpoint.key || undefined,
-        professorEndpoint.model,
-        messages,
-        opts
-      );
-    }
-    // No dedicated endpoint or no key — fall back to free Pollinations AI.
-    return openAiCompatibleChat(POLLINATIONS_URL, undefined, POLLINATIONS_MODEL, messages, opts);
-  },
+  chat: (messages, opts) =>
+    openAiCompatibleChat(POLLINATIONS_URL, undefined, POLLINATIONS_MODEL, messages, opts),
 };
 
 export const pollinationsProvider: AiProvider = {

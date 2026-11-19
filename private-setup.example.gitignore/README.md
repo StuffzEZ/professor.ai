@@ -97,9 +97,9 @@ npm run dev
 | `VITE_FIREBASE_APP_ID` | `.env.local` |
 | `VITE_FIREBASE_MEASUREMENT_ID` | `.env.local` (optional — Google Analytics) |
 | `VITE_APPCHECK_KEY` | `.env.local` (reCAPTCHA Enterprise site key, recommended) |
-| `VITE_PROFESSOR_API_URL` | `.env.local` (optional) |
-| `VITE_PROFESSOR_API_KEY` | `.env.local` (optional) |
-| `VITE_PROFESSOR_MODEL` | `.env.local` (optional) |
+| ~~`VITE_PROFESSOR_API_URL`~~ | **Removed** — see Security Notes below |
+| ~~`VITE_PROFESSOR_API_KEY`~~ | **Removed** — see Security Notes below |
+| ~~`VITE_PROFESSOR_MODEL`~~ | **Removed** — see Security Notes below |
 | `firestore.rules` | Firebase Console → Firestore → Rules |
 | `manifest.json` | `public/manifest.json` |
 
@@ -108,5 +108,6 @@ npm run dev
 - Never commit `.env.local` or any file containing secrets.
 - App Check (reCAPTCHA Enterprise) is best-effort deterrence — it reduces bots but does not guarantee security.
 - Per-account quotas are enforced in Firestore rules, not client-side code.
+- **No API keys in the build bundle**: The Professor AI endpoint was previously configured via `VITE_PROFESSOR_*` env vars, but these were removed because Vite bakes all `VITE_*` variables into the JS bundle. On GitHub Pages, anyone can read the bundle and extract your API key. The "Professor AI" provider now uses Pollinations AI (free, keyless) at build time. Users who want a custom endpoint configure it in Settings — the value is stored in localStorage, never in the bundle.
 - Disposable email domains are blocked at sign-up via a client-side check.
 - Email verification is required before generating lessons or publishing publicly.

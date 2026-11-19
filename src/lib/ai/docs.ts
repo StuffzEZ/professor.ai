@@ -79,13 +79,24 @@ const MAX_EXCERPT = 1200;
  * Fetch a plain-text excerpt from a URL. We intentionally strip scripts and
  * tags and keep only a small excerpt — this is a hint, not a full dump.
  */
-async function fetchExcerpt(url: string): Promise<string> {
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return '';
-    const html = await res.text();
-    // Strip scripts/styles, then tags, then collapse whitespace.
-    const cleaned = html
+/**
+ * Escape a string so it is safe to insert into a regex pattern.
+ * Used to sanitize user-controlled input before it is used in regex.
+ */
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Remove any HTML tags and entities from a string, keeping only text content.
+ * Uses a DOMParser-based approach for safe, standards-compliant sanitization
+ * rather than regex (which CodeQL flags for incomplete multi-character
+ * sanitization, double-escaping, and bad HTML filtering).
+ */
+function sanitizeHtml(html: string): string {
+  if (typeof DOMParser === 'undefined') {
+    // Fallback for non-browser environments (shouldn't happen in this app).
+    return html
       .replace(/<script[\s\S]*?<\/script>/gi, '')
       .replace(/<style[\s\S]*?<\/style>/gi, '')
       .replace(/<[^>]+>/g, ' ')
@@ -95,6 +106,27 @@ async function fetchExcerpt(url: string): Promise<string> {
       .replace(/&gt;/g, '>')
       .replace(/\s+/g, ' ')
       .trim();
+  }
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  // Remove script and style elements entirely.
+  doc.querySelectorAll('script, style').forEach((el) => el.remove());
+
+  // Get the text content — this strips all HTML tags and decodes entities.
+  const text = doc.body.textContent ?? '';
+
+  // Collapse whitespace and trim.
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+async function fetchExcerpt(url: string): Promise<string> {
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) return '';
+    const html = await res.text();
+    const cleaned = sanitizeHtml(html);
     return cleaned.slice(0, MAX_EXCERPT);
   } catch {
     return '';

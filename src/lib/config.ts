@@ -3,9 +3,13 @@
  *
  * All values come from Vite env vars (see .env.example / private-setup/README.md).
  * Nothing here is a secret that must stay private: the Firebase web config and
- * the App Check key are public by design. The Professor AI endpoint key is
- * intended for a low-trust, rate-limited public endpoint — see DECISIONS.md.
- */
+  * the App Check key are public by design.
+  *
+  * The Professor AI endpoint is NOT configured at build time. It is set at
+  * runtime in Settings (stored in localStorage). Vite bakes VITE_* env vars
+  * into the JS bundle, and on a static GitHub Pages site anyone can read the
+  * bundle. Putting a secret API key there would expose it.
+  */
 
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? '',
@@ -28,24 +32,25 @@ export const appCheckKey = import.meta.env.VITE_APPCHECK_KEY ?? '';
  */
 export const appCheckEnabled = import.meta.env.VITE_APPCHECK_ENABLED === 'true';
 
-export const professorEndpoint = {
-  url: import.meta.env.VITE_PROFESSOR_API_URL ?? '',
-  key: import.meta.env.VITE_PROFESSOR_API_KEY ?? '',
-  model: import.meta.env.VITE_PROFESSOR_MODEL ?? 'gpt-4o-mini',
-};
-
 /**
- * Whether the Professor AI endpoint key is actually present at build time.
- * When false, the app falls back to Pollinations AI (free, keyless).
+ * The Professor AI endpoint is configured at runtime (in Settings), NOT at
+ * build time. This is intentional: Vite bakes VITE_* env vars into the JS
+ * bundle, and on a static GitHub Pages site anyone can read the bundle.
+ * Putting a secret API key there would expose it.
+ *
+ * The "Professor AI" provider uses Pollinations AI (free, keyless) by default.
+ * Users who want a custom endpoint configure it in Settings — the value is
+ * stored in localStorage, never in the bundle.
  */
-export const hasProfessorKey = Boolean(professorEndpoint.key);
+export const professorEndpoint = {
+  url: '',
+  key: '',
+  model: 'gpt-4o-mini',
+};
 
 /** True when the Firebase web config has been filled in. */
 export const isFirebaseConfigured =
   Boolean(firebaseConfig.apiKey) && Boolean(firebaseConfig.projectId);
-
-/** True when a dedicated Professor AI endpoint is configured. */
-export const isProfessorEndpointConfigured = Boolean(professorEndpoint.url);
 
 /**
  * Pollinations AI — free, keyless, OpenAI-compatible.
