@@ -40,7 +40,7 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
           VITE_APPCHECK_KEY: ${{ secrets.VITE_APPCHECK_KEY }}
-                    VITE_APPCHECK_ENABLED: ${{ secrets.VITE_APPCHECK_ENABLED }}
+          VITE_APPCHECK_ENABLED: ${{ secrets.VITE_APPCHECK_ENABLED }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
