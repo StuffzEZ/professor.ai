@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2026-11-18 (v1.2.13 — @grpc/grpc-js override to patched 1.14.7, bundle re-verified clean)
+> Last updated: 2026-11-19 (v1.2.15 — relative base path so the app works on the custom domain AND GitHub Pages)
 
 ## ✅ Done
 
@@ -85,7 +85,28 @@
     did not match object" parse error).
   - Stale Dependabot PRs #1, #2, #4 branched from old commits — close them manually at
     https://github.com/StuffzEZ/professor.ai/pulls (no PR-close API available in this session).
-  - **v1.2.13 — @grpc/grpc-js override to patched version**:
+  - **v1.2.15 — relative base path fix (critical)**:
+  - The live site at `professorai.stufy.qzz.io` was blank — assets 404'd. The app was
+    built with `base: '/professor.ai/'` (correct for `stuffzez.github.io/professor.ai/`),
+    but the custom domain serves at the root, so every asset reference 404'd.
+  - Changed `vite.config.ts` `BASE_PATH` default from `'/professor.ai/'` to `'.'` (relative).
+    Relative paths resolve against the page's actual URL, so the SAME build now works on
+    BOTH `professorai.stufy.qzz.io` (root) and `stuffzez.github.io/professor.ai/`.
+  - Verified locally with `npx serve dist`: landing page renders, no 404s on
+    `/favicon.svg`, `/assets/index-*.js`, `/assets/index-*.css`.
+  - Re-verified `dist/` is clean: no `private-ai-gateway`, `freellmapi-`, or `VITE_PROFESSOR`
+    strings. (The `AIza...` Firebase API key is public by design — it's the project
+    identifier, not a secret; security comes from Firestore rules + App Check.)
+- **v1.2.14 — logo and favicon redesign**:
+  - Redesigned `src/components/ui/Logo.tsx` as a stylised "P" monogram (rounded tile
+    `#080919`, P stroke `#6c8cff` 2.4px, the dot of the P doubling as an AI spark at
+    22,22, with a small accent tick at 8,24). Single component with `size` and
+    `variant` props, used everywhere (Header, Landing, SignIn, footer).
+  - Updated `public/favicon.svg` to match. `manifest.json` already references it.
+  - Verified `npm run build` passes (14.6s, 1890 modules) and `dist/index.html`
+    links `/professor.ai/favicon.svg`.
+  - Bumped `package.json` version field to 1.2.14 (git tag v1.2.14).
+- **v1.2.13 — @grpc/grpc-js override to patched version**:
     - Added `"overrides": { "@grpc/grpc-js": "^1.14.7" }` to `package.json`.
       `@firebase/firestore@4.20.0` pins `@grpc/grpc-js` to `~1.9.0`, which is vulnerable to
       CVE-2025-0001 (unauthorized certificate via `getAuthContext`) and CVE-2025-0002
@@ -98,7 +119,9 @@
 
   ## 🔄 In Progress
 
-- None — all security fixes committed and pushed.
+  - **Base-path fix (v1.2.15)** — committed locally, being pushed to trigger redeploy.
+    After the workflow completes, reload `https://professorai.stufy.qzz.io` to confirm the
+    landing page renders with no 404s.
 
 ## 📋 Next
 

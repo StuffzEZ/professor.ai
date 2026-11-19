@@ -5,8 +5,10 @@ import { dirname, resolve } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// GitHub Pages serves from https://<user>.github.io/<repo>/
-const BASE_PATH = process.env.VITE_BASE_PATH ?? '/professor.ai/';
+// Serves at the root on the custom domain (professorai.stufy.qzz.io) and at
+// /professor.ai/ on <user>.github.io. A relative base ('.') works for both
+// because it resolves against the page's actual URL.
+const BASE_PATH = process.env.VITE_BASE_PATH ?? '.';
 
 // All Firebase config values are public by design — they are safe to ship in
 // the client bundle. The only truly secret value is the Professor AI endpoint
