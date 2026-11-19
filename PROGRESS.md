@@ -1,6 +1,6 @@
 # Professor AI — Progress
 
-> Last updated: 2026-11-19 (v1.2.15 — relative base path so the app works on the custom domain AND GitHub Pages)
+> Last updated: 2026-11-19 (v1.2.16 — deploy workflow YAML fix + live site verified working)
 
 ## ✅ Done
 
@@ -85,7 +85,14 @@
     did not match object" parse error).
   - Stale Dependabot PRs #1, #2, #4 branched from old commits — close them manually at
     https://github.com/StuffzEZ/professor.ai/pulls (no PR-close API available in this session).
-  - **v1.2.15 — relative base path fix (critical)**:
+  - **v1.2.16 — deploy workflow YAML indentation fix**:
+  - `VITE_APPCHECK_ENABLED` was indented with spaces instead of tabs, causing a YAML
+    ScannerError at line 43. GitHub Actions silently skipped all jobs (status=completed,
+    conclusion=failure, total_count=0) — no build ran on commits `8e55674` and earlier.
+  - Fixed the indentation so both CI and Deploy workflows now pass.
+  - Verified: commit `bbd9bf5`, tags `v1.2.16` pushed, CI #14 and Deploy #24 completed
+    successfully.
+- **v1.2.15 — relative base path fix (critical)**:
   - The live site at `professorai.stufy.qzz.io` was blank — assets 404'd. The app was
     built with `base: '/professor.ai/'` (correct for `stuffzez.github.io/professor.ai/`),
     but the custom domain serves at the root, so every asset reference 404'd.
@@ -119,9 +126,9 @@
 
   ## 🔄 In Progress
 
-  - **Base-path fix (v1.2.15)** — committed locally, being pushed to trigger redeploy.
-    After the workflow completes, reload `https://professorai.stufy.qzz.io` to confirm the
-    landing page renders with no 404s.
+  - None — base-path fix (v1.2.15) and deploy-workflow YAML fix (v1.2.16) are committed,
+    pushed, and deployed. The live site at `professorai.stufy.qzz.io` now renders the
+    landing page with no 404s, and the deployed bundle is verified clean of secrets.
 
 ## 📋 Next
 
