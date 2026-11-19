@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, BookOpen, Settings, LogOut, Menu, X } from 'lucide-react';
 import { useApp } from '../../context';
 import { getFirebaseAuth } from '../../lib/firebase';
+import { Logo } from '../ui';
 
 export function Header({ onNewLesson }: { onNewLesson?: () => void }) {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export function Header({ onNewLesson }: { onNewLesson?: () => void }) {
           className="flex items-center gap-2 font-semibold text-lg text-text-primary hover:text-accent transition-colors"
           aria-label="Professor AI home"
         >
-          <Logo />
+          <Logo size={24} />
           <span className="hidden sm:inline">Professor AI</span>
         </button>
 
@@ -111,15 +112,5 @@ export function Header({ onNewLesson }: { onNewLesson?: () => void }) {
         </div>
       )}
     </header>
-  );
-}
-
-function Logo() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="2" y="2" width="20" height="20" rx="6" fill="#6c8cff" fillOpacity="0.15" stroke="#6c8cff" strokeWidth="1.5"/>
-      <path d="M7 8h10M7 12h7M7 16h4" stroke="#6c8cff" strokeWidth="1.5" strokeLinecap="round"/>
-      <circle cx="17.5" cy="12" r="1.5" fill="#6c8cff"/>
-    </svg>
   );
 }

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Circle, Github, Mail, Lock } from 'lucide-react';
+import { Circle, Github, Mail, Lock, ArrowLeft } from 'lucide-react';
 import { getFirebaseAuth } from '../lib/firebase';
 import { upsertUserProfile, isDisposableEmail } from '../lib/store';
 import type { ProviderId, Difficulty } from '../lib/types';
 import toast from 'react-hot-toast';
+import { Logo } from '../components/ui';
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -103,14 +104,25 @@ export default function SignIn() {
   }
 
   return (
-    <div className="min-h-[calc(100dvh-4rem)] flex items-center justify-center px-4">
+    <div className="min-h-[calc(100dvh-4rem)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center space-y-2">
+          <div className="flex justify-center mb-4">
+            <Logo size={48} />
+          </div>
           <h1 className="text-2xl font-bold text-text-primary">Welcome to Professor AI</h1>
           <p className="text-sm text-text-secondary">
             Sign in to create and track your learning journeys.
           </p>
         </div>
+
+        <button
+          className="text-xs text-text-muted hover:text-text-secondary transition-colors flex items-center gap-1 justify-center"
+          onClick={() => navigate('/')}
+        >
+          <ArrowLeft size={12} />
+          Back to home
+        </button>
 
         {showEmailForm ? (
           <form onSubmit={handleEmailSignIn} className="space-y-4">

@@ -8,6 +8,7 @@ import { MainLayout } from './components/layout';
 import { Loader } from './components/ui';
 import SignIn from './pages/SignIn';
 import Onboarding from './pages/Onboarding';
+import Landing from './pages/Landing';
 
 // Lazy-loaded pages for code splitting
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -47,14 +48,6 @@ export default function App() {
 
   const router = createBrowserRouter([
     {
-      path: '/signin',
-      element: user ? <Navigate to="/" replace /> : <SignIn />,
-    },
-    {
-      path: '/onboarding',
-      element: user ? <Onboarding /> : <Navigate to="/signin" replace />,
-    },
-    {
       path: '/',
       element: user ? (
         needsOnboarding ? (
@@ -67,8 +60,16 @@ export default function App() {
           </MainLayout>
         )
       ) : (
-        <Navigate to="/signin" replace />
+        <Landing />
       ),
+    },
+    {
+      path: '/signin',
+      element: user ? <Navigate to="/" replace /> : <SignIn />,
+    },
+    {
+      path: '/onboarding',
+      element: user ? <Onboarding /> : <Navigate to="/" replace />,
     },
     {
       path: '/discover',

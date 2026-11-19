@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bot } from 'lucide-react';
+import { ArrowLeft, Bot, Code, Gamepad, Puzzle, Smartphone, Globe, Database, Cpu, Brush, Music, Book, Rocket, Wrench, FileText, Info } from 'lucide-react';
 import { Button, Input } from '../../components/ui';
 import { assessFeasibility, generateLessonPlan } from '../../lib/ai/generator';
 import { professorProvider } from '../../lib/ai/provider';
@@ -343,7 +343,7 @@ export function CreateFlow() {
 
           {visibility === 'public' && (
             <p className="text-xs text-text-muted px-1">
-              ℹ️ Public lessons are visible to all learners and can be copied. Consider whether your content is appropriate for a broad audience.
+              <Info size={12} className="text-text-muted mr-1" aria-hidden="true" /> Public lessons are visible to all learners and can be copied. Consider whether your content is appropriate for a broad audience.
             </p>
           )}
         </div>
@@ -365,10 +365,11 @@ function diffDesc(d: Difficulty): string {
 }
 
 function templateIcon(icon: string) {
-  const icons: Record<string, string> = {
-    code: '📝', gamepad: '🎮', puzzle: '🧩', smartphone: '📱', globe: '🌍',
-    database: '🗄️', cpu: '⚙️', brush: '🎨', music: '🎵', book: '📖',
-    rocket: '🚀', wrench: '🔧',
+  const icons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+    code: Code, gamepad: Gamepad, puzzle: Puzzle, smartphone: Smartphone, globe: Globe,
+    database: Database, cpu: Cpu, brush: Brush, music: Music, book: Book,
+    rocket: Rocket, wrench: Wrench,
   };
-  return icons[icon] ?? '📁';
+  const Icon = icons[icon] ?? FileText;
+  return <Icon size={28} className="text-accent" />;
 }

@@ -28,6 +28,14 @@
 - GitHub Actions: `.github/workflows/deploy.yml` — builds and deploys to GitHub Pages
 - CI: `.github/workflows/ci.yml` — lint + typecheck + build on every push and PR
 - Issue templates: `.github/ISSUE_TEMPLATE/bug-report.yml`, `feature-request.yml`, `config.yml`
+- **v1.2.7 icon/logo standardization**:
+  - Created centralized `src/components/ui/Logo.tsx` — single SVG component with `size` and
+    `variant` props, replacing duplicate inline SVGs across `Header.tsx`, `SignIn.tsx`, `Landing.tsx`
+  - Replaced all emoji icons (🎮💻📚📝🧩📱🌍🗄️⚙️🎵📖✓✗💡ℹ️) with Lucide React SVG components
+    in `CreateFlow.tsx`, `Discover.tsx`, `LessonPlayer.tsx`, `Settings.tsx`
+  - Implemented working Sign Out button in `Settings.tsx` (previously a TODO stub)
+  - Fixed syntax error in `Landing.tsx` (orphaned closing brackets)
+  - Verified `npm run build` passes with zero TypeScript errors
 - **Major dependency migration** (v1.2.6):
   - `firebase` 10 → 13.4.0 (resolves undici high vulnerabilities)
   - `react` 18 → 19.3.1, `react-dom` 18 → 19.3.1

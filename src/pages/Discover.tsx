@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Globe, Bookmark } from 'lucide-react';
+import { Search, Globe, Bookmark, Code, Gamepad, BookOpen, Folder } from 'lucide-react';
 import { listPublicLessons, copyPublicLesson } from '../lib/store';
 import type { PublicLessonSummary, LessonPlan } from '../lib/types';
 import type { QueryDocumentSnapshot } from 'firebase/firestore';
@@ -141,7 +141,11 @@ export default function DiscoverPage() {
 }
 
 function lessonCategoryIcon(icon: string) {
-  return icon === 'gamepad' ? '🎮' : icon === 'code' ? '💻' : icon === 'book' ? '📚' : '📁';
+  const icons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+    gamepad: Gamepad, code: Code, book: BookOpen,
+  };
+  const Icon = icons[icon] ?? Folder;
+  return <Icon size={20} />;
 }
 
 function timeAgo(dateStr: string): string {

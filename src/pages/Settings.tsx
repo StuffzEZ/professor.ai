@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { Check, LogOut, X } from 'lucide-react';
 import { useApp } from '../context';
 import { ProviderId, CustomEndpoint, Difficulty } from '../lib/types';
 import { Button, Input } from '../components/ui';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { getFirebaseAuth } from '../lib/firebase';
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const { settings, setSettings, user } = useApp();
   const [customEndpoint, setCustomEndpoint] = useState<{ baseUrl: string; apiKey: string; model: string }>({
     baseUrl: settings.customEndpoint?.baseUrl ?? '',
@@ -30,6 +34,16 @@ export default function SettingsPage() {
           : null,
     });
     toast.success(`Switched to ${providerLabel(provider)}.`);
+  }
+
+  async function signOut() {
+    try {
+      await getFirebaseAuth().signOut();
+      toast.success('Signed out');
+      navigate('/');
+    } catch (err) {
+      toast.error('Sign out failed');
+    }
   }
 
   return (
@@ -136,8 +150,9 @@ export default function SettingsPage() {
             </div>
             <div className="flex justify-between">
               <span className="text-text-muted">Verified</span>
-              <span className={`${user.emailVerified ? 'text-success' : 'text-warning'}`}>
-                {user.emailVerified ? '✓ Verified' : '✗ Not verified'}
+              <span className={`flex items-center gap-1 ${user.emailVerified ? 'text-success' : 'text-warning'}`}>
+                {user.emailVerified ? <Check size={14} aria-hidden="true" /> : <X size={14} aria-hidden="true" />}
+                {user.emailVerified ? 'Verified' : 'Not verified'}
               </span>
             </div>
             <div className="flex justify-between">
@@ -155,27 +170,30 @@ export default function SettingsPage() {
 
       {/* Quota info */}
       <section className="card space-y-3">
-        <h2 className="font-medium text-text-primary">Quotas (free tier)</h2>
-        <ul className="text-sm text-text-muted space-y-1 list-disc list-inside">
-          <li>{5} generations per day (established accounts)</li>
-          <li>{2} generations per day (accounts &lt;7 days old)</li>
-          <li>{10} public publishes per 30 days</li>
-          <li>Minimum {30}s gap between generations</li>
-        </ul>
-        <p className="text-xs text-text-muted">
-          These limits are enforced both client-side and in Firestore security rules.
-        </p>
-      </section>
+              <h2 className="font-medium text-text-primary">Quotas (free tier)</h2>
+              <ul className="text-sm text-text-muted space-y-1 list-disc list-inside">
+                <li>{5} generations per day (established accounts)</li>
+                <li>{2} generations per day (accounts &lt;7 days old)</li>
+                <li>{10} public publishes per 30 days</li>
+                <li>Minimum {30}s gap between generations</li>
+              </ul>
+              <p className="text-xs text-text-muted">
+                These limits are enforced both client-side and in Firestore security rules.
+              </p>
+            </section>
 
-      <div className="flex justify-end">
-        <Button variant="secondary" onClick={() => window.history.back()}>
-          Done
-        </Button>
-      </div>
-    </div>
-  );
-}
+            <div className="flex justify-between items-center pt-2">
+              <Button variant="secondary" onClick={() => window.history.back()} className="flex-1 mr-2">
+                Done
+              </Button>
+              <Button variant="ghost" onClick={signOut} className="flex-1 ml-2 text-danger hover:bg-danger/10">
+                <LogOut size={16} /> Sign Out
+              </Button>
+            </div>
+          </div>
+        );
+      }
 
-function providerLabel(id: ProviderId): string {
-  return { professor: 'Professor AI', pollinations: 'Pollinations AI', custom: 'Custom endpoint' }[id];
-}
+      function providerLabel(id: ProviderId): string {
+        return { professor: 'Professor AI', pollinations: 'Pollinations AI', custom: 'Custom endpoint' }[id];
+      }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, ChevronUp, CheckCircle, Lock, Globe, BookOpen } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, CheckCircle, Lock, Globe, BookOpen, Lightbulb } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import toast from 'react-hot-toast';
@@ -321,7 +321,7 @@ function CodingExercise({
               .slice(0, hintsSeen + (showHints ? 1 : 0))
               .map((h, i) => (
                 <p key={i} className="text-xs text-warning pl-4 border-l-2 border-warning/40">
-                  💡 {h}
+                  <Lightbulb size={12} className="text-warning mr-1" aria-hidden="true" /> {h}
                 </p>
               ))}
         </div>
