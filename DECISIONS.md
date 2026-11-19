@@ -87,3 +87,25 @@
 **Why:** The user explicitly requested GitHub Pages. It's free and integrates well with the GitHub repo.
 
 **Trade-off:** GitHub Pages requires the repo to be public. We document this. The `base` path in `vite.config.ts` must match the repo name.
+
+## 11. No Build-Time API Keys in Static Bundles
+
+**Decision:** Do not configure any secret API keys as `VITE_*` environment variables. The Professor AI endpoint is configured at runtime in Settings (stored in localStorage). Custom endpoints work the same way — no secrets in the bundle.
+
+**Why:** Vite replaces all `import.meta.env.VITE_*` references with actual string values **at build time**. On GitHub Pages, the resulting JS bundle (`dist/assets/*.js`) is publicly served. Anyone can read it and extract your API key. This is by design, not a bug — static sites have no server-side code to keep secrets private.
+
+**What this means:**
+- Firebase web config (`apiKey`, `projectId`, etc.) is safe — it's a public project identifier, not a secret. The real protection comes from Authorized Domains and Firestore rules.
+- App Check reCAPTCHA site key is safe — it's a domain-registered identifier, not a secret.
+- The Professor AI API key is intentionally NOT in the bundle. Users who want a dedicated endpoint configure it in Settings.
+- Pollinations AI requires no key at all.
+
+**Trade-off:** A dedicated Professor AI endpoint cannot be baked into the GitHub Actions build. Users who want one configure it themselves via Settings. This is the correct security posture for a fully-static deployment.
+
+## 12. HTML Sanitization via DOMParser (Not Regex)
+
+**Decision:** Strip HTML from fetched documentation using `DOMParser.parseFromString()` + `textContent`, with a safe regex fallback (built from `escapeRegExp`) for environments without DOMParser.
+
+**Why:** CodeQL flagged the previous regex-based HTML stripping with four high-severity alerts (bad HTML filtering regexp, incomplete multi-character sanitization, double escaping). Regexes cannot reliably parse HTML; the DOM parser is the standards-compliant approach and handles all edge cases.
+
+**Trade-off:** Slightly more code than a regex. The fallback path is only used in non-browser environments (e.g. tests) and is conservative (strips all tags).
