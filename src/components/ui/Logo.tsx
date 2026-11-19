@@ -25,11 +25,27 @@ export function Logo({ size = 24, variant = 'default', className, ...props }: Lo
       aria-hidden="true"
       {...props}
     >
-      <rect width="32" height="32" rx="6" fill="#080919" />
-      <rect x="4" y="8" width="20" height="16" rx="2" fill="none" stroke={color} strokeWidth="2" />
-      <circle cx="14" cy="16" r="3" fill={color} />
-      <circle cx="22" cy="16" r="2" fill={color} opacity="0.6" />
-      <path d="M8 24h16v2H8z" fill={color} />
+      {/* Background tile */}
+      <rect width="32" height="32" rx="7" fill="#080919" />
+
+      {/* Stylised "P" monogram — the dot of the P doubles as an AI spark */}
+      <path
+        d="M10 8h7a5 5 0 0 1 0 10h-7V8z"
+        fill="none"
+        stroke={color}
+        strokeWidth="2.4"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10 18h7"
+        stroke={color}
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <circle cx="22" cy="22" r="2.6" fill={color} />
+
+      {/* Small accent tick bottom-left */}
+      <circle cx="8" cy="24" r="1.4" fill={color} opacity="0.5" />
     </svg>
   );
 }
