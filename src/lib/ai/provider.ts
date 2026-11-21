@@ -32,7 +32,6 @@ async function openAiCompatibleChat(
   opts: ChatOptions = {}
 ): Promise<string> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
     method: 'POST',
@@ -122,3 +121,5 @@ export function parseJson<T>(raw: string): T {
     throw new AiError('Could not parse the AI response. Please try again.');
   }
 }
+
+
